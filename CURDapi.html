@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="./bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .hovr {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .hovr:hover {
+            transform: scale(1.05);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div class="container-fluid g-0" style="display: flex; align-items: center; justify-content: center">
+        <div class="row g-2 mt-2 w-50" id="CheckFormPart" style="display: none">
+            <h2 style="text-align: center; font-size: 25px">Search Data By Name</h2>
+            <div class="col-6">
+                <label>First Name</label>
+                <input type="text" id="firstNameCheck" class="form-control" />
+            </div>
+            <div class="col-6">
+                <label>Last Name</label>
+                <input type="text" id="lastNameCheck" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <button onclick="searchData()" id="searchData" class="btn w-100 btn-primary">
+                    Search Details
+                </button>
+            </div>
+            <br />
+
+            <div class="col-12">
+                <h6 style="float: right; cursor: pointer; color: rgb(148, 18, 18)" onclick="changeDisplay()">
+                    Create New Data
+                </h6>
+            </div>
+        </div>
+
+        <div class="row g-2 mt-2 w-50" id="SubmitFormPart" style="display: ''">
+            <div class="col-md-6">
+                <label>First Name
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" oninput="resetBorder('inputText1')" id="inputText1"
+                    name="name" />
+                <div id="inputTextColor1" style="color: red; font-size: 12px"></div>
+            </div>
+            <div class="col-md-6">
+                <label for="inputText2">Last Name</label>
+                <input type="text" class="form-control" id="inputText2" name="lastName" />
+                <div id="inputTextColor2" style="color: red; font-size: 12px"></div>
+            </div>
+            <div class="col-md-6">
+                <label for="inputText3">Father Name
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span>
+                </label>
+                <input type="text" class="form-control" oninput="resetBorder('inputText3')" id="inputText3"
+                    name="fatherName" />
+                <div id="inputTextColor3" style="color: red; font-size: 12px"></div>
+            </div>
+            <div class="col-md-6">
+                <label for="inputText4">Mother Name
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" oninput="resetBorder('inputText4')" id="inputText4"
+                    name="mmotherName" />
+                <div id="inputTextColor4" style="color: red; font-size: 12px"></div>
+            </div>
+            <div class="col-12">
+                <label for="inputAddress">Address
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" oninput="resetBorder('inputAddress')" id="inputAddress"
+                    name="Address" />
+                <div id="inputAddressColor" style="color: red; font-size: 12px"></div>
+            </div>
+            <div class="col-12">
+                <label for="inputAddress2" class="form-label">Address 2</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="" name="addressOptional" />
+            </div>
+
+            <div class="col-md-5">
+                <label for="inputState" class="form-label">State
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span></label>
+                <div class="input-group">
+                    <select id="inputState" class="form-select"
+                        onchange="resetBorder('inputState') , changeState() , stateToCitites()" name="state"
+                        style="cursor: pointer"></select>
+                    <span class="input-group-text" style="cursor: pointer" id="stateAdd" onclick="statesAdd()"><i
+                            class="fa-solid fa-plus"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="inputCity" class="form-label">City
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span></label>
+                <div class="input-group">
+                    <select class="form-select" id="inputCity" disabled
+                        onchange="resetBorder('inputCity') , onCitiesZipCoded()" name="city"></select>
+                    <span class="input-group-text" style="cursor: pointer" id="citiesAdd" onclick="citiesAdd()"><i
+                            class="fa-solid fa-plus"></i></span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="inputZip" class="form-label">Zip
+                    <span style="font-size: 8px; color: red; position: relative; top: -7px"><i
+                            class="fa-solid fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" maxlength="6" size="6" id="inputZip" disabled name="zipCode" />
+                <div id="inputZipeColor"></div>
+            </div>
+
+            <div class="row mt-2 g-1">
+                <button onclick="submitData()" id="submitData" style="display: block" class="btn w-100 btn-primary">
+                    Submit Details
+                </button>
+
+                <div class="col-6">
+                    <div id="saveUpdateData"></div>
+                </div>
+
+                <div class="col-6">
+                    <div id="deletData"></div>
+                </div>
+
+                <div class="col-6">
+                    <button id="searchUser" onclick="searchDisplay()" class="btn btn-secondary w-100">
+                        Search Data
+                    </button>
+                </div>
+
+                <div class="col-6">
+                    <button onclick="ShowAllDetails()" id="showData" class="btn btn-secondary w-100">
+                        Show Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div id="demo"></div>
+    <div class="container-fluid mt-2 g-0" id="allDataShowByName" style="width: 50rem">
+        <div id="dataPrintPreviously" class="row"></div>
+    </div>
+
+    <script src="CURDapi.js"></script>
+</body>
+
+</html>
